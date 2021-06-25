@@ -3,10 +3,12 @@ import * as starWarsAPI from "../../util/API/starWarsAPI";
 import { Grid, TextField, MenuItem } from "@material-ui/core";
 import Logo from "../../Assets/logo.png"
 import FilmCard from "../../components/Cards/Film"
+import { Typography } from "@material-ui/core";
 
 export default function Start(props) {
   const [textSearch, setTextSearch] = useState("");
   const [search, setSearch] = useState("Movie");
+  const [personSearch, setPersonSearch] = useState("");
   const [option] = useState(["Movie", "People"]);
   const [allMoviesObjetic, setAllMoviesObject] = useState({});
   const [allPeopleObjetic, setAllPeopleObject] = useState({});
@@ -65,11 +67,12 @@ export default function Start(props) {
     }
     else {
       let filtred = [];
+      setPersonSearch("")
       let nameFilter = allPeople.filter((character) =>
         character.name.split(' ').join('').toLowerCase().includes(value.split(' ').join('').toLowerCase())
       )
       if (nameFilter.length === 1) {
-
+        setPersonSearch(nameFilter[0].name)
         nameFilter[0].films.map(filmUrl => {
           return filtred.push(allMoviesObjetic[filmUrl]);
         })
@@ -120,9 +123,15 @@ export default function Start(props) {
             </Grid>
           </Grid>
         </Grid>
+        {search === "People" && (
+          <Grid item xs={12} style={{ marginTop: 8 }} >
+            <Typography align="center" style={{ color: "white" }}>
+              {!textSearch ? "Write the name of the character you are searching for" : !personSearch ? "We didn't find anyone with this information" : `We found: ${personSearch}"`} </Typography>
+          </Grid>
+        )}
       </Grid>
       <Grid container justify="center" alignItems="center">
-        <Grid item xs={6} style={{ marginTop: 32 }}>
+        <Grid item xs={6} style={{ marginTop: 16 }}>
           <Grid container justify="flex-start" alignItems="center" spacing={2} >
             {filtredMovies.length > 0 && filtredMovies.map((movie => (
               <Grid item xs={4} >
